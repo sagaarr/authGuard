@@ -16,15 +16,20 @@ export class ForAllService {
           console.log("called")
           let data = JSON.stringify(responceData);
           let objectData = JSON.parse(data);
-          
+
           //=== Storing token to local storage here ==== 
           window.localStorage.setItem('token', objectData.token);
+
+       
           this.router.navigate(['/home']);
 
         }, (err)=>{
           console.log(err)
 
         })
+  }
+  GetAllProducts(){
+    return this.http.get("http://localhost:5003/api/user-list")
   }
 
   register(name:string,email:string,password:string){

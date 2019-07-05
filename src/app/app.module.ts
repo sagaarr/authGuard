@@ -8,6 +8,7 @@ import { RegisterComponent } from './register/register.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeGroundComponent } from './home-ground/home-ground.component';
+import {InterceptorService} from '../app/interceptor.service';
 import {DonGuard} from '../app/don.guard'
 
 @NgModule({
@@ -25,6 +26,12 @@ import {DonGuard} from '../app/don.guard'
     HttpClientModule
   ],
   providers: [
+    {
+      provide:HTTP_INTERCEPTORS, 
+      useClass: InterceptorService, 
+      multi:true
+    },
+    
     DonGuard
   ],
   bootstrap: [AppComponent]
