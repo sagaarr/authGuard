@@ -12,14 +12,14 @@ export class DonGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      let localStorageToken = window.localStorage.getItem("token")
+      let localStorageToken = window.localStorage.getItem("currentUser")
       if(localStorageToken){
-        console.log('Something')
+        console.log('User is authorized to access this route == authGuard')
         return true;
       }
-      console.log("Nothing goes here Mind It Its Rajnikant style ")
+      console.log("User is Not authorized to access this route == authGuard")
       this.router.navigate(['/login']);
-
+     
       return false 
   }
 

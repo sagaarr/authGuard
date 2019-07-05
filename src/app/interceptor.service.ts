@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpHeaders } from '@angular/common/http';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpHeaders, HttpResponse } from '@angular/common/http';
 import {Observable , of, throwError} from 'rxjs'
 
 
@@ -13,31 +13,37 @@ export class InterceptorService implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next:HttpHandler): Observable<HttpEvent<any>> {
     
-    if(localStorage.getItem('token') !== null){
-      /*
-        ****************** THIS METHOD IS ALSO CORRECT HERE ****************************
+    
+    /*
+        // ****************** THIS METHOD IS ALSO CORRECT HERE ****************************
     // when user logIn take its token and put it in header 
-      const localToken = localStorage.getItem('token')
+      const localToken = JSON.parse(localStorage.getItem('currentUser'))
       // Add the token to the header 
-      const headers = new HttpHeaders().set('access-token' , localToken);
+      const headers = new HttpHeaders().set('Authorization' , localToken.token);
       // Clone Http to custom auth request 
       const AuthReq = request.clone({headers: headers})
 
        return next.handle(AuthReq);
       
-      */
+  }
+*/
 
-      let currentUser = localStorage.getItem('token');
-      if(currentUser && currentUser){
+      // ******************different approach ***************************
+      let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if(currentUser && currentUser.token){
+        
+        console.log(`interceptor service route hit  ${currentUser}`);
         request = request.clone({
           setHeaders:{
-            Authorization: `Bearer ${currentUser}`
+
+            'Authorization': `Bearer ${currentUser.token}`
+
           }
         })
       }
-    }
+   
     return next.handle(request);
-  }
+    }
 
-
+  
 }

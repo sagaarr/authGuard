@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {FormGroup, FormControl, Validators} from '@angular/forms'
 import {HttpClient} from '@angular/common/http'
 import {ForAllService} from '../for-all.service'
-import {register} from '../register.model'
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-register',
@@ -13,7 +14,11 @@ export class RegisterComponent implements OnInit {
 
   registerForm : FormGroup ; 
 
-  constructor(private service:ForAllService) { }
+  constructor(private service:ForAllService, private router:Router) {
+    if(JSON.parse(localStorage.getItem('currentUser')) == true){
+      this.router.navigate(['/login']);
+    }
+   }
 
   ngOnInit() {
     this.registerForm = new FormGroup({
@@ -32,6 +37,8 @@ export class RegisterComponent implements OnInit {
   onSubmit(){
     const val = this.registerForm.value
     this.service.register(val.name,val.email,val.password)
+    this.router.navigate(['/login'])
+
   }
 
 }

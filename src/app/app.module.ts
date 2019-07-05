@@ -9,7 +9,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeGroundComponent } from './home-ground/home-ground.component';
 import {InterceptorService} from '../app/interceptor.service';
-import {DonGuard} from '../app/don.guard'
+ import {ErrorInterceptor} from '../app/error.interceptor'
+import {DonGuard} from '../app/don.guard';
+import {UserProtectionGuard} from '../app/user-login.guard'
 
 @NgModule({
   declarations: [
@@ -31,8 +33,14 @@ import {DonGuard} from '../app/don.guard'
       useClass: InterceptorService, 
       multi:true
     },
-    
-    DonGuard
+    {
+      provide:HTTP_INTERCEPTORS,
+      useClass:ErrorInterceptor,
+      multi:true
+    },
+
+    DonGuard,
+    UserProtectionGuard, 
   ],
   bootstrap: [AppComponent]
 })

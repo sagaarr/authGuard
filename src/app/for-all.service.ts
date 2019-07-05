@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http'
 import {Router} from '@angular/router'
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({providedIn: 'root'})
 export class ForAllService {
 
   constructor(private http:HttpClient,private router:Router) { }
@@ -13,12 +11,11 @@ export class ForAllService {
     return this.http.post('http://localhost:5003/api/login', {email, password})
   
         .subscribe(responceData =>{
-          console.log("called")
-          let data = JSON.stringify(responceData);
-          let objectData = JSON.parse(data);
+          console.log("from login service ")
+       
 
           //=== Storing token to local storage here ==== 
-          window.localStorage.setItem('token', objectData.token);
+          localStorage.setItem('currentUser', JSON.stringify(responceData));
 
        
           this.router.navigate(['/home']);
@@ -28,14 +25,17 @@ export class ForAllService {
 
         })
   }
+  // ==========================TO GET ALL USERS 
   GetAllProducts(){
-    return this.http.get("http://localhost:5003/api/user-list")
+    return this.http.get("http://localhost:5003/api/user-list").subscribe(data =>{
+      console.log(data);
+    })
   }
 
   register(name:string,email:string,password:string){
     this.http.post("http://localhost:5003/api/register", {name,email,password})
               .subscribe((responceData)=>{ 
-                console.log("called")
+                console.log("called from register ")
                  this.router.navigate(['/home']);
                   console.log(responceData)
                   
@@ -44,4 +44,8 @@ export class ForAllService {
                 })
 
               }
+              
+    logout(){
+      localStorage.removeItem('currentUser')
+     }
 }
